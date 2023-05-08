@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         binding.buttonIniciar.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 repeat(10){index ->
-                    Log.d("Teste","Contando: $index - Thread: ${Thread.currentThread().name}")
+                    Log.d("Coroutines","Contando: $index - Thread: ${Thread.currentThread().name}")
                     //Thread.sleep(2000)
                     delay(2000)
                     withContext(Dispatchers.Main){
@@ -31,5 +31,29 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        binding.buttonSuspensa.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                executar()
+            }
+        }
+
     }
+
+    private suspend fun recuperarPostagem(idUsuario: Int) : List<String>{
+        delay(2000)
+
+        return listOf("Elanilson","Rafaela","Miguel")
+
+    }
+    private suspend fun executar(){
+        var usuario = recuperarUsuarioLogado()
+        Log.d("Coroutines","usuario: ${usuario.nome} - Thread: ${Thread.currentThread().name}")
+        var postagens =  recuperarPostagem(usuario.id)
+        Log.d("Coroutines","postagens: ${postagens.size} - Thread: ${Thread.currentThread().name}")
+    }
+      private  suspend fun recuperarUsuarioLogado() : Usuario{
+           delay(2000)
+           return Usuario(10,"Elanilson")
+       }
 }
