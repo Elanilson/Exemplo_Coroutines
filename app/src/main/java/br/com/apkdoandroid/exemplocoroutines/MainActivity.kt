@@ -8,6 +8,7 @@ import br.com.apkdoandroid.exemplocoroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonSuspensa.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
+          /*  CoroutineScope(Dispatchers.IO).launch {
               //  executar()
                 job =  CoroutineScope(Dispatchers.IO).launch {
                    /* withTimeout(5000L){
@@ -73,9 +74,36 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-            }
+            }*/
+
+            sync_()
         }
 
+    }
+
+    private fun sync_(){
+        CoroutineScope(Dispatchers.IO).launch {
+            //  executar()
+            job =  CoroutineScope(Dispatchers.IO).launch {
+                /* withTimeout(5000L){
+                     exec()
+                 }*/
+
+                //tarefas simultaneas
+
+                var tempo  =  measureNanoTime {
+                    val resultado1 =  async {tarefa1() }
+                    val resultado2 =  async {tarefa2() }
+
+
+                    Log.d("Coroutines","Resultado1: ${resultado1.await()}")
+                    Log.d("Coroutines","Resultado2: ${resultado2.await()}")
+                }
+                Log.d("Coroutines","Tempo: $tempo")
+
+            }
+
+        }
     }
 
     private suspend fun  tarefa1() : String{
