@@ -4,10 +4,13 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import br.com.apkdoandroid.exemplocoroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -81,7 +84,24 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun sync_(){
+    fun tipoEscopo(){
+      //  CoroutineScope(Dispatchers.Main).launch {
+      //  MainScope().launch {
+       // CoroutineScope(Dispatchers.IO).launch {
+       // GlobalScope(Dispatchers.IO).launch {
+        lifecycleScope.launch {
+            repeat(10){index ->
+                Log.d("Coroutines","Contando: $index - Thread: ${Thread.currentThread().name}")
+                //Thread.sleep(2000)
+                delay(2000)
+                withContext(Dispatchers.Main){
+                    binding.buttonIniciar.text = "Contando: $index - Thread: ${Thread.currentThread().name}"
+
+                }
+            }
+        }
+    }
+    private  fun sync_(){
         CoroutineScope(Dispatchers.IO).launch {
             //  executar()
             job =  CoroutineScope(Dispatchers.IO).launch {
